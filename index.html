@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booster • CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: 234 179 8;
+        }
+        
+        .tail-container {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .phone-frame {
+            box-shadow: 0 0 0 12px #111827,
+                        0 0 0 16px #1f2937;
+        }
+
+        .nav-active {
+            color: rgb(234 179 8);
+            position: relative;
+        }
+        
+        .nav-active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background-color: rgb(234 179 8);
+            border-radius: 50%;
+        }
+
+        .contact-row {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .contact-row:hover {
+            background-color: #18181b;
+            transform: translateX(8px);
+        }
+
+        .modal {
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes modalPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .bottom-sheet {
+            animation: sheetUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        
+        @keyframes sheetUp {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .status-bar {
+            height: 44px;
+            background: linear-gradient(to right, #18181b, #27272a);
+        }
+
+        .list-item {
+            transition: all 0.3s ease;
+        }
+
+        .fab {
+            box-shadow: 0 10px 15px -3px rgb(234 179 8 / 0.3),
+                        0 4px 6px -4px rgb(234 179 8 / 0.3);
+        }
+
+        .car-bg {
+            background: linear-gradient(135deg, #27272a, #3f3f46);
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-950 text-white flex items-center justify-center min-h-screen">
+    <div class="phone-frame w-full max-w-[380px] mx-auto bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-700 flex flex-col h-[720px] relative" id="phone">
+        
+        <!-- STATUS BAR -->
+        <div class="status-bar flex items-end px-6 text-[10px] text-zinc-400">
+            <div class="flex-1 flex justify-between items-center pb-1">
+                <div class="font-medium">9:41</div>
+                <div class="flex items-center gap-x-3">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <div class="flex items-center gap-x-1">
+                        <span>87</span>
+                        <i class="fa-solid fa-battery-three-quarters"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP HEADER -->
+        <div class="h-14 bg-zinc-900 border-b border-zinc-800 px-4 flex items-center justify-between z-50" id="app-header">
+            <div class="flex items-center gap-x-2">
+                <div class="w-7 h-7 bg-yellow-400 rounded-2xl flex items-center justify-center text-zinc-900 text-xs font-bold logo-font shadow-inner">B</div>
+                <div>
+                    <span class="logo-font text-2xl font-semibold tracking-tighter text-yellow-300">BOOSTER</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-4" id="header-actions">
+                <!-- Dynamic based on view -->
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 overflow-y-auto bg-zinc-950 pb-16" id="main-content">
+            
+            <!-- DASHBOARD VIEW -->
+            <div id="view-dashboard" class="view">
+                <!-- Welcome -->
+                <div class="car-bg px-6 pt-6 pb-8">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="text-yellow-300 text-sm font-medium">Good morning, Zannatul.</div>
+                            <div class="text-3xl font-semibold tracking-tighter mt-1">Let's fix some cars.</div>
+                        </div>
+                        <div class="w-10 h-10 bg-zinc-700 rounded-2xl overflow-hidden border border-yellow-400/30">
+                            <img style="height:40px;" src="https://i.postimg.cc/7LDQdqk9/smart1Zannatul.png" alt="Zannatul" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    
+                    <!-- Quick stats -->
+                    <div class="grid grid-cols-3 gap-3 mt-8">
+                        <div onclick="switchView('view-jobs')" 
+                             class="bg-zinc-900/70 backdrop-blur-md rounded-3xl p-4 cursor-pointer hover:bg-yellow-400/10 transition-colors">
+                            <div class="text-xs text-zinc-400">OPEN JOBS</div>
+                            <div class="text-4xl font-semibold text-white mt-1">14</div>
+                            <div class="text-emerald-400 text-xs flex items-center gap-x-1 mt-4">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                                <span>3 today</span>
+                            </div>
+                        </div>
+                        
+                        <div onclick="switchView('view-contacts')" 
+                             class="bg-zinc-900/70 backdrop-blur-md rounded-3xl p-4 cursor-pointer hover:bg-yellow-400/10 transition-colors">
+                            <div class="text-xs text-zinc-400">NEW LEADS</div>
+                            <div class="text-4xl font-semibold text-white mt-1">7</div>
+                            <div class="text-amber-400 text-xs flex items-center gap-x-1 mt-4">
+                                <i class="fa-solid fa-fire"></i>
+                                <span>2 hot</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-zinc-900/70 backdrop-blur-md rounded-3xl p-4 cursor-pointer hover:bg-yellow-400/10 transition-colors">
+                            <div class="text-xs text-zinc-400">THIS WEEK</div>
+                            <div class="text-4xl font-semibold text-white mt-1">$18k</div>
+                            <div class="text-sky-400 text-xs flex items-center gap-x-1 mt-4">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>4 booked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Today's agenda -->
+                <div class="px-5 mt-2">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <div class="uppercase text-xs font-semibold tracking-widest text-zinc-400">Today's agenda</div>
+                        <div onclick="switchView('view-calendar')" 
+                             class="text-yellow-300 text-xs flex items-center gap-x-1 cursor-pointer">
+                            <span>ALL</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <!-- Agenda item 1 -->
+                        <div class="bg-zinc-900 rounded-3xl p-4 flex gap-4 list-item">
+                            <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-car-side text-3xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <div class="font-semibold">Sarah Chen - Dent repair</div>
+                                        <div class="text-xs text-zinc-400 mt-0.5">2019 BMW X3 • 10:30am</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="px-3 py-1 bg-emerald-400 text-emerald-950 text-[10px] font-bold rounded-3xl">IN PROGRESS</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-[10px] text-zinc-500 mt-4 gap-x-5">
+                                    <div class="flex items-center gap-x-1">
+                                        <i class="fa-solid fa-clock"></i>
+                                        <span>45 min left</span>
+                                    </div>
+                                    <div>Bay 2</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Agenda item 2 -->
+                        <div class="bg-zinc-900 rounded-3xl p-4 flex gap-4 list-item">
+                            <div class="w-12 h-12 bg-sky-100 text-sky-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-user text-3xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-semibold">Mike Torres - Estimate review</div>
+                                <div class="text-xs text-zinc-400 mt-0.5">2:15pm • Zoom</div>
+                                <div class="mt-4 text-amber-300 text-xs flex items-center">
+                                    <i class="fa-solid fa-bell mr-2"></i>
+                                    <span>Follow up on quote</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick actions -->
+                <div class="mt-8 px-5">
+                    <div class="uppercase text-xs font-semibold tracking-widest text-zinc-400 mb-4 px-1">Quick actions</div>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div onclick="showNewContactModal()" 
+                             class="flex flex-col items-center cursor-pointer">
+                            <div class="w-12 h-12 bg-zinc-800 hover:bg-yellow-400 hover:text-zinc-900 transition-all rounded-2xl flex items-center justify-center text-2xl mb-2 shadow-inner">
+                                👤
+                            </div>
+                            <div class="text-[10px] text-center font-medium">New<br>Contact</div>
+                        </div>
+                        <div onclick="switchView('view-jobs')" 
+                             class="flex flex-col items-center cursor-pointer">
+                            <div class="w-12 h-12 bg-zinc-800 hover:bg-yellow-400 hover:text-zinc-900 transition-all rounded-2xl flex items-center justify-center text-2xl mb-2 shadow-inner">
+                                🔧
+                            </div>
+                            <div class="text-[10px] text-center font-medium">New Job</div>
+                        </div>
+                        <div onclick="switchView('view-calendar')" 
+                             class="flex flex-col items-center cursor-pointer">
+                            <div class="w-12 h-12 bg-zinc-800 hover:bg-yellow-400 hover:text-zinc-900 transition-all rounded-2xl flex items-center justify-center text-2xl mb-2 shadow-inner">
+                                📅
+                            </div>
+                            <div class="text-[10px] text-center font-medium">Schedule</div>
+                        </div>
+                        <div onclick="showToast('Message broadcast sent to 42 customers')" 
+                             class="flex flex-col items-center cursor-pointer">
+                            <div class="w-12 h-12 bg-zinc-800 hover:bg-yellow-400 hover:text-zinc-900 transition-all rounded-2xl flex items-center justify-center text-2xl mb-2 shadow-inner">
+                                ✉️
+                            </div>
+                            <div class="text-[10px] text-center font-medium">Message</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent contacts -->
+                <div class="mt-10 px-5">
+                    <div class="flex justify-between items-baseline mb-4">
+                        <div class="uppercase text-xs font-semibold tracking-widest text-zinc-400">Recent contacts</div>
+                        <div onclick="switchView('view-contacts')" class="text-yellow-300 text-sm cursor-pointer flex items-center gap-x-2">
+                            SEE ALL 
+                            <span class="text-xs bg-zinc-800 h-5 w-5 flex items-center justify-center rounded-full">12</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-x-4 overflow-x-auto pb-4 snap-x" id="recent-contacts">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CONTACTS VIEW -->
+            <div id="view-contacts" class="view hidden flex flex-col h-full">
+                <!-- Search and filters -->
+                <div class="sticky top-0 bg-zinc-950 z-10 px-5 pt-4 pb-3 border-b border-zinc-800">
+                    <div class="relative">
+                        <input id="search-input" 
+                               onkeyup="filterContacts()"
+                               type="text" 
+                               placeholder="Search contacts or vehicles..." 
+                               class="w-full bg-zinc-900 border border-zinc-700 focus:border-yellow-400 transition-colors h-12 pl-12 rounded-3xl text-sm outline-none">
+                        <div class="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter tabs -->
+                    <div class="flex gap-x-2 mt-5 text-xs overflow-x-auto pb-1">
+                        <div onclick="setFilter(this)" class="filter-tab active px-5 py-2 bg-yellow-400 text-zinc-900 font-semibold rounded-3xl whitespace-nowrap cursor-pointer">All</div>
+                        <div onclick="setFilter(this)" class="filter-tab px-5 py-2 bg-zinc-900 hover:bg-zinc-800 font-medium rounded-3xl whitespace-nowrap cursor-pointer" style="color:yellow;">Customers</div>
+                        <div onclick="setFilter(this)" class="filter-tab px-5 py-2 bg-zinc-900 hover:bg-zinc-800 font-medium rounded-3xl whitespace-nowrap cursor-pointer">Leads</div>
+                        <div onclick="setFilter(this)" class="filter-tab px-5 py-2 bg-zinc-900 hover:bg-zinc-800 font-medium rounded-3xl whitespace-nowrap cursor-pointer">VIP</div>
+                    </div>
+                </div>
+                
+                <!-- Contacts list -->
+                <div class="flex-1 overflow-auto px-2" id="contacts-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <!-- JOBS / PIPELINE VIEW -->
+            <div id="view-jobs" class="view hidden flex flex-col h-full">
+                <div class="px-5 pt-5">
+                    <div class="flex border-b border-zinc-700 text-sm">
+                        <div onclick="setPipelineTab(0)" id="pipeline-tab-0" 
+                             class="flex-1 text-center pb-3 border-b-2 border-yellow-300 text-yellow-300 font-semibold cursor-pointer">LEADS (4)</div>
+                        <div onclick="setPipelineTab(1)" id="pipeline-tab-1" 
+                             class="flex-1 text-center pb-3 text-zinc-400 hover:text-zinc-200 cursor-pointer">QUOTED (9)</div>
+                        <div onclick="setPipelineTab(2)" id="pipeline-tab-2" 
+                             class="flex-1 text-center pb-3 text-zinc-400 hover:text-zinc-200 cursor-pointer">IN PROGRESS (11)</div>
+                    </div>
+                </div>
+                
+                <div class="flex-1 p-5 space-y-4 overflow-auto" id="pipeline-content">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <!-- CALENDAR VIEW -->
+            <div id="view-calendar" class="view hidden">
+                <div class="p-5">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-lg">March 2025</div>
+                        <div class="flex items-center gap-x-6 text-sm">
+                            <i onclick="prevMonth()" class="fa-solid fa-chevron-left cursor-pointer"></i>
+                            <i onclick="nextMonth()" class="fa-solid fa-chevron-right cursor-pointer"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Mini calendar -->
+                    <div class="grid grid-cols-7 gap-px bg-zinc-800 p-1 rounded-3xl mt-6 text-center text-xs">
+                        <div class="text-zinc-400 py-2">S</div>
+                        <div class="text-zinc-400 py-2">M</div>
+                        <div class="text-zinc-400 py-2">T</div>
+                        <div class="text-zinc-400 py-2">W</div>
+                        <div class="text-zinc-400 py-2">T</div>
+                        <div class="text-zinc-400 py-2">F</div>
+                        <div class="text-zinc-400 py-2">S</div>
+                        
+                        <!-- Fake dates -->
+                        <div class="bg-zinc-900 rounded-2xl py-3 text-zinc-500">23</div>
+                        <div class="bg-zinc-900 rounded-2xl py-3 text-zinc-500">24</div>
+                        <div class="bg-zinc-900 rounded-2xl py-3 text-zinc-500">25</div>
+                        <div onclick="selectDate(this)" class="bg-yellow-400 text-zinc-900 rounded-2xl py-3 font-bold">26</div>
+                        <div onclick="selectDate(this)" class="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-2xl py-3">27</div>
+                        <div onclick="selectDate(this)" class="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-2xl py-3">28</div>
+                        <div onclick="selectDate(this)" class="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-2xl py-3">29</div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <div class="text-xs uppercase font-medium mb-4 flex items-center gap-x-2">
+                            <div class="flex-1 h-px bg-zinc-700"></div>
+                            <div>3 APPOINTMENTS</div>
+                            <div class="flex-1 h-px bg-zinc-700"></div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="text-right w-16">
+                                    <div class="text-sm font-mono">10:00</div>
+                                    <div class="text-[10px] text-emerald-400">30m</div>
+                                </div>
+                                <div class="flex-1 bg-zinc-900 rounded-3xl p-5">
+                                    <div class="flex items-center gap-x-3">
+                                        <div class="px-2.5 py-1 text-[10px] bg-purple-400 text-purple-950 font-bold rounded-xl">ESTIMATE</div>
+                                        <div class="font-medium">Olivia Martinez</div>
+                                    </div>
+                                    <div class="text-xs text-zinc-400 mt-6">2023 Tesla Model Y • Bumper replacement quote</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <div class="text-right w-16">
+                                    <div class="text-sm font-mono">13:30</div>
+                                    <div class="text-[10px] text-amber-400">90m</div>
+                                </div>
+                                <div class="flex-1 bg-zinc-900 rounded-3xl p-5">
+                                    <div class="flex items-center gap-x-3">
+                                        <div class="px-2.5 py-1 text-[10px] bg-red-400 text-red-950 font-bold">REPAIR</div>
+                                        <div class="font-medium">Jamal Wright</div>
+                                    </div>
+                                    <div class="text-xs text-zinc-400 mt-6">Ford F-150 • Full paint correction</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CONTACT DETAIL OVERLAY -->
+            <div onclick="if(event.target.id === 'contact-overlay') hideContactDetail()" 
+                 id="contact-overlay" 
+                 class="hidden fixed inset-0 bg-black/70 z-[9999] flex items-end">
+                <div onclick="event.stopImmediatePropagation()" 
+                     class="bg-zinc-900 w-full max-w-[380px] mx-auto rounded-t-3xl bottom-sheet overflow-hidden"
+                     style="height: 82vh">
+                    
+                    <!-- Detail header -->
+                    <div class="h-2 w-12 bg-zinc-700 rounded-full mx-auto mt-3"></div>
+                    
+                    <div class="px-6 pt-6" id="detail-header">
+                        <!-- JS injected -->
+                    </div>
+                    
+                    <div class="px-6 mt-6 flex gap-x-4">
+                        <button onclick="makeFakeCall()" 
+                                class="flex-1 h-12 bg-emerald-400 hover:bg-emerald-300 transition-colors text-emerald-950 font-semibold text-sm rounded-3xl flex items-center justify-center gap-x-2">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>CALL</span>
+                        </button>
+                        <button onclick="showToast('Text message composer opened')" 
+                                class="flex-1 h-12 bg-zinc-700 hover:bg-zinc-600 transition-colors font-semibold text-sm rounded-3xl flex items-center justify-center gap-x-2">
+                            <i class="fa-solid fa-message"></i>
+                            <span>TEXT</span>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-8 px-6">
+                        <div class="grid grid-cols-3 gap-px bg-zinc-800 rounded-3xl p-1 text-center text-xs">
+                            <div class="py-3 bg-zinc-900 rounded-3xl font-medium cursor-pointer">Info</div>
+                            <div onclick="switchDetailTab(1)" class="py-3 text-zinc-400 hover:text-white cursor-pointer">History</div>
+                            <div onclick="switchDetailTab(2)" class="py-3 text-zinc-400 hover:text-white cursor-pointer">Notes</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Info content -->
+                    <div class="px-6 mt-7" id="detail-info">
+                        <div class="flex justify-between items-center py-5 border-b border-zinc-800">
+                            <div class="text-sm text-zinc-400">Vehicle</div>
+                            <div class="text-right">
+                                <div class="font-medium text-sm" id="detail-vehicle">2022 Porsche 911 Carrera</div>
+                                <div class="text-xs text-lime-400">VIN: 1N4AL3AP6FC123456</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-5 border-b border-zinc-800">
+                            <div class="text-sm text-zinc-400">Email</div>
+                            <div class="font-medium text-sm text-sky-300" id="detail-email">sarah@email.com</div>
+                        </div>
+                        <div class="flex justify-between items-center py-5 border-b border-zinc-800">
+                            <div class="text-sm text-zinc-400">Phone</div>
+                            <div class="font-medium text-sm" id="detail-phone">(415) 555-1289</div>
+                        </div>
+                        <div class="flex justify-between items-center py-5 border-b border-zinc-800">
+                            <div class="text-sm text-zinc-400">Last visit</div>
+                            <div class="font-medium text-sm">Feb 12, 2025</div>
+                        </div>
+                    </div>
+                    
+                    <!-- History content (hidden by default) -->
+                    <div class="hidden px-6 mt-7 overflow-auto" id="detail-history" style="height: 310px">
+                        <div class="space-y-8">
+                            <div class="flex gap-3">
+                                <div class="text-right w-14 text-xs pt-1">
+                                    <div class="text-zinc-400">FEB 12</div>
+                                </div>
+                                <div class="flex-1 border-l border-dashed border-zinc-600 pl-6">
+                                    <div class="text-xs bg-zinc-800 w-fit px-3 py-1 rounded-3xl">Service complete</div>
+                                    <div class="text-sm mt-2">Oil change + tire rotation completed.</div>
+                                    <div class="text-[10px] text-zinc-500 mt-1">$378 • Bay 3</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="text-right w-14 text-xs pt-1">
+                                    <div class="text-zinc-400">JAN 4</div>
+                                </div>
+                                <div class="flex-1 border-l border-dashed border-zinc-600 pl-6">
+                                    <div class="text-xs bg-amber-300 text-amber-900 w-fit px-3 py-1 rounded-3xl">Quote sent</div>
+                                    <div class="text-sm mt-2">Bumper repair quote for $1,240</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes tab -->
+                    <div id="detail-notes" class="hidden px-6 mt-6">
+                        <textarea id="note-input" rows="5" 
+                                  class="w-full resize-y bg-zinc-900 border border-zinc-700 focus:border-yellow-300 p-4 rounded-3xl text-sm outline-none"
+                                  placeholder="Add a note about this customer..."></textarea>
+                        <button onclick="saveNote()" 
+                                class="mt-4 w-full h-10 text-xs tracking-widest bg-white text-zinc-900 font-semibold rounded-3xl">SAVE NOTE</button>
+                        
+                        <div class="mt-8 text-xs text-zinc-400">Previous notes</div>
+                        <div class="mt-4 text-xs bg-zinc-900 p-4 rounded-3xl">
+                            Customer prefers text reminders rather than calls.
+                        </div>
+                    </div>
+                    
+                    <div class="absolute bottom-8 left-0 right-0 px-6">
+                        <button onclick="hideContactDetail()" 
+                                class="w-full py-4 text-xs font-semibold border border-zinc-700 hover:bg-zinc-800 transition-colors rounded-3xl">
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BOTTOM NAV -->
+        <div class="h-16 bg-zinc-900 border-t border-zinc-700 px-2 flex items-center justify-around text-xs z-50 absolute bottom-0 left-0 right-0">
+            <div onclick="switchView('view-dashboard')" 
+                 class="flex flex-col items-center cursor-pointer nav-item text-yellow-400" id="nav-dashboard">
+                <i class="fa-solid fa-house text-xl"></i>
+                <div class="mt-1 text-[10px]">Home</div>
+            </div>
+            <div onclick="switchView('view-contacts')" 
+                 class="flex flex-col items-center cursor-pointer nav-item text-zinc-400" id="nav-contacts">
+                <i class="fa-solid fa-address-book text-xl"></i>
+                <div class="mt-1 text-[10px]">Contacts</div>
+            </div>
+            <div onclick="switchView('view-jobs')" 
+                 class="flex flex-col items-center cursor-pointer nav-item text-zinc-400 relative -top-6" id="nav-jobs">
+                <div class="w-14 h-14 bg-yellow-400 text-zinc-950 rounded-3xl flex items-center justify-center shadow-2xl shadow-yellow-500/40">
+                    <i class="fa-solid fa-wrench text-3xl"></i>
+                </div>
+            </div>
+            <div onclick="switchView('view-calendar')" 
+                 class="flex flex-col items-center cursor-pointer nav-item text-zinc-400" id="nav-calendar">
+                <i class="fa-solid fa-calendar-days text-xl"></i>
+                <div class="mt-1 text-[10px]">Schedule</div>
+            </div>
+            <div onclick="showToast('Profile view would open here')" 
+                 class="flex flex-col items-center cursor-pointer nav-item text-zinc-400" id="nav-profile">
+                <i class="fa-solid fa-user text-xl"></i>
+                <div class="mt-1 text-[10px]">Me</div>
+            </div>
+        </div>
+        
+        <!-- FLOATING ACTION BUTTON -->
+        <div onclick="showNewContactModal()" 
+             class="fab absolute bottom-20 right-6 w-14 h-14 bg-yellow-400 hover:bg-amber-300 transition-all text-zinc-950 rounded-3xl flex items-center justify-center shadow-2xl cursor-pointer z-50">
+            <i class="fa-solid fa-plus text-3xl"></i>
+        </div>
+        
+        <!-- TOAST -->
+        <div id="toast" onclick="this.classList.add('hidden')" 
+             class="hidden absolute bottom-28 left-1/2 -translate-x-1/2 bg-zinc-800 border border-yellow-300 text-yellow-200 text-xs px-5 py-3 rounded-3xl shadow-2xl flex items-center gap-x-3">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toast-text"></span>
+        </div>
+        
+        <!-- NEW CONTACT MODAL -->
+        <div onclick="if(event.target.id === 'new-contact-modal') hideNewContactModal()" 
+             id="new-contact-modal"
+             class="hidden fixed inset-0 bg-black/70 z-[99999] flex items-center justify-center">
+            <div class="modal bg-zinc-900 w-[320px] rounded-3xl p-6">
+                <div class="text-lg font-semibold mb-6">New Contact</div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs text-zinc-400 mb-2">FULL NAME</label>
+                        <input id="new-name" type="text" value="Taylor Brooks" 
+                               class="bg-zinc-800 border border-transparent focus:border-yellow-400 w-full h-11 rounded-2xl px-4 outline-none text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-zinc-400 mb-2">PHONE</label>
+                            <input id="new-phone" type="tel" value="(650) 555-7733" 
+                                   class="bg-zinc-800 border border-transparent focus:border-yellow-400 w-full h-11 rounded-2xl px-4 outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-zinc-400 mb-2">VEHICLE</label>
+                            <input id="new-vehicle" type="text" value="2024 Subaru Outback" 
+                                   class="bg-zinc-800 border border-transparent focus:border-yellow-400 w-full h-11 rounded-2xl px-4 outline-none text-sm">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs text-zinc-400 mb-2">EMAIL</label>
+                        <input id="new-email" type="email" value="taylor.b@email.com" 
+                               class="bg-zinc-800 border border-transparent focus:border-yellow-400 w-full h-11 rounded-2xl px-4 outline-none text-sm">
+                    </div>
+                </div>
+                
+                <div class="flex gap-x-3 mt-10">
+                    <button onclick="hideNewContactModal()" 
+                            class="flex-1 py-4 text-xs font-semibold border border-zinc-600 rounded-3xl">CANCEL</button>
+                    <button onclick="createNewContact()" 
+                            class="flex-1 py-4 text-xs font-semibold bg-yellow-400 text-zinc-900 rounded-3xl">CREATE CONTACT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tailwind script run
+        function initializeTailwind() {
+            // Already configured via CDN
+        }
+        
+        let currentView = 'view-dashboard'
+        let contacts = [
+            {
+                id: 1,
+                name: "Sarah Chen",
+                phone: "(415) 555-1289",
+                vehicle: "2019 BMW X3",
+                avatar: "SC",
+                color: "bg-purple-500",
+                lastContact: "2d ago",
+                status: "customer",
+                email: "sarah.chen@email.com"
+            },
+            {
+                id: 2,
+                name: "Marcus Rivera",
+                phone: "(510) 867-4432",
+                vehicle: "2022 Tesla Model Y",
+                avatar: "MR",
+                color: "bg-blue-500",
+                lastContact: "1w ago",
+                status: "lead",
+                email: "marcus.r@email.com"
+            },
+            {
+                id: 3,
+                name: "Priya Sharma",
+                phone: "(650) 234-7765",
+                vehicle: "2021 Honda CR-V",
+                avatar: "PS",
+                color: "bg-pink-500",
+                lastContact: "4d ago",
+                status: "customer",
+                email: "priya.sharma@me.com"
+            },
+            {
+                id: 4,
+                name: "Jamal Wright",
+                phone: "(707) 555-9921",
+                vehicle: "2018 Ford F-150",
+                avatar: "JW",
+                color: "bg-orange-500",
+                lastContact: "12h ago",
+                status: "vip",
+                email: "jamalwright22@gmail.com"
+            },
+            {
+                id: 5,
+                name: "Elena Petrova",
+                phone: "(408) 777-3344",
+                vehicle: "2023 Audi A4",
+                avatar: "EP",
+                color: "bg-teal-500",
+                lastContact: "3w ago",
+                status: "lead",
+                email: "elena@petrova.co"
+            }
+        ]
+        
+        let currentContact = null
+        
+        function populateRecentContacts() {
+            const container = document.getElementById('recent-contacts')
+            container.innerHTML = ''
+            
+            const recent = contacts.slice(0, 4)
+            
+            recent.forEach(contact => {
+                const div = document.createElement('div')
+                div.className = `flex-shrink-0 w-20 snap-center cursor-pointer`
+                div.innerHTML = `
+                    <div onclick="viewContactDetailFromRecent(${contact.id}); event.stopImmediatePropagation()" 
+                         class="w-20 h-20 ${contact.color} text-white rounded-3xl flex items-center justify-center text-3xl font-light shadow-inner">
+                        ${contact.avatar}
+                    </div>
+                    <div class="text-center text-xs mt-3 leading-none">
+                        <div class="font-medium">${contact.name.split(' ')[0]}</div>
+                        <div class="text-emerald-400 text-[10px]">${contact.lastContact}</div>
+                    </div>
+                `
+                container.appendChild(div)
+            })
+        }
+        
+        function renderContacts(filteredContacts) {
+            const container = document.getElementById('contacts-list')
+            container.innerHTML = ''
+            
+            if (filteredContacts.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-64 text-zinc-400">
+                        <i class="fa-solid fa-magnifying-glass text-5xl mb-6 opacity-30"></i>
+                        <div class="font-medium">No contacts found</div>
+                    </div>
+                `
+                return
+            }
+            
+            const ul = document.createElement('div')
+            ul.className = 'divide-y divide-zinc-800'
+            
+            filteredContacts.forEach(contact => {
+                const row = document.createElement('div')
+                row.className = `contact-row px-5 py-5 flex items-center gap-x-4 cursor-pointer`
+                row.innerHTML = `
+                    <div class="w-10 h-10 ${contact.color} text-white text-sm font-medium flex items-center justify-center rounded-2xl shadow-inner flex-shrink-0">
+                        ${contact.avatar}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold truncate">${contact.name}</div>
+                            <div class="text-xs text-zinc-500 whitespace-nowrap">${contact.lastContact}</div>
+                        </div>
+                        <div class="text-xs text-zinc-400 mt-px truncate">${contact.vehicle}</div>
+                    </div>
+                    <div onclick="event.stopImmediatePropagation(); quickCall(${contact.id});" 
+                         class="w-8 h-8 bg-emerald-900 hover:bg-emerald-800 transition-colors rounded-2xl flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-phone text-xs"></i>
+                    </div>
+                `
+                row.onclick = () => showContactDetail(contact.id)
+                ul.appendChild(row)
+            })
+            
+            container.appendChild(ul)
+        }
+        
+        function filterContacts() {
+            const term = document.getElementById('search-input').value.toLowerCase().trim()
+            
+            if (!term) {
+                renderContacts(contacts)
+                return
+            }
+            
+            const filtered = contacts.filter(c => 
+                c.name.toLowerCase().includes(term) ||
+                c.vehicle.toLowerCase().includes(term) ||
+                c.email.toLowerCase().includes(term)
+            )
+            
+            renderContacts(filtered)
+        }
+        
+        function setFilter(el) {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active', 'bg-yellow-400', 'text-zinc-900')
+                tab.classList.add('bg-zinc-900')
+            })
+            el.classList.add('active', 'bg-yellow-400', 'text-zinc-900')
+            
+            // For demo purposes we just re-render all
+            renderContacts(contacts)
+        }
+        
+        function showContactDetail(id) {
+            currentContact = contacts.find(c => c.id === id)
+            if (!currentContact) return
+            
+            const overlay = document.getElementById('contact-overlay')
+            const headerHTML = `
+                <div class="flex items-center gap-x-4">
+                    <div onclick="hideContactDetail()" class="w-8 h-8 flex items-center justify-center text-2xl leading-none text-zinc-400">←</div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-x-3">
+                            <div class="w-12 h-12 ${currentContact.color} text-white flex items-center justify-center text-3xl font-light rounded-3xl shadow-inner">
+                                ${currentContact.avatar}
+                            </div>
+                            <div>
+                                <div class="text-2xl font-semibold tracking-tight">${currentContact.name}</div>
+                                <div class="flex items-center gap-x-2 text-xs">
+                                    <div class="px-3 py-1 bg-teal-900 text-teal-300 rounded-3xl">${currentContact.status}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-zinc-400">LAST TOUCH</div>
+                        <div class="font-mono text-xl text-yellow-200">${currentContact.lastContact}</div>
+                    </div>
+                </div>
+            `
+            document.getElementById('detail-header').innerHTML = headerHTML
+            document.getElementById('detail-vehicle').textContent = currentContact.vehicle
+            document.getElementById('detail-email').textContent = currentContact.email
+            document.getElementById('detail-phone').textContent = currentContact.phone
+            
+            // Reset tabs
+            switchDetailTab(0)
+            
+            overlay.classList.remove('hidden')
+            overlay.classList.add('flex')
+        }
+        
+        function hideContactDetail() {
+            const overlay = document.getElementById('contact-overlay')
+            overlay.classList.add('hidden')
+            overlay.classList.remove('flex')
+        }
+        
+        function viewContactDetailFromRecent(id) {
+            showContactDetail(id)
+        }
+        
+        function quickCall(id) {
+            const contact = contacts.find(c => c.id === id)
+            if (!contact) return
+            showToast(`Calling ${contact.name}...`)
+            event.stopImmediatePropagation()
+        }
+        
+        function makeFakeCall() {
+            if (!currentContact) return
+            hideContactDetail()
+            setTimeout(() => {
+                showToast(`📞 Connected with ${currentContact.name}`)
+            }, 400)
+        }
+        
+        function switchDetailTab(tab) {
+            const info = document.getElementById('detail-info')
+            const history = document.getElementById('detail-history')
+            const notes = document.getElementById('detail-notes')
+            
+            info.classList.add('hidden')
+            history.classList.add('hidden')
+            notes.classList.add('hidden')
+            
+            if (tab === 0) {
+                info.classList.remove('hidden')
+            } else if (tab === 1) {
+                history.classList.remove('hidden')
+            } else if (tab === 2) {
+                notes.classList.remove('hidden')
+            }
+        }
+        
+        function saveNote() {
+            const noteArea = document.getElementById('note-input')
+            if (noteArea.value.trim() === '') return
+            showToast('Note saved successfully!')
+            noteArea.value = ''
+        }
+        
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.add('hidden')
+            })
+            
+            // Show the selected
+            const targetView = document.getElementById(viewId)
+            if (targetView) targetView.classList.remove('hidden')
+            
+            currentView = viewId
+            
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('text-yellow-400')
+                nav.classList.add('text-zinc-400')
+            })
+            
+            if (viewId === 'view-dashboard') {
+                document.getElementById('nav-dashboard').classList.add('text-yellow-400')
+                document.getElementById('nav-dashboard').classList.remove('text-zinc-400')
+            } else if (viewId === 'view-contacts') {
+                document.getElementById('nav-contacts').classList.add('text-yellow-400')
+                document.getElementById('nav-contacts').classList.remove('text-zinc-400')
+                // Make sure list is rendered
+                if (document.getElementById('contacts-list').children.length < 3) {
+                    renderContacts(contacts)
+                }
+            } else if (viewId === 'view-jobs') {
+                document.getElementById('nav-jobs').classList.add('text-yellow-400')
+                renderPipeline(0)
+            } else if (viewId === 'view-calendar') {
+                document.getElementById('nav-calendar').classList.add('text-yellow-400')
+            }
+            
+            // Change header title
+            updateHeaderForView(viewId)
+        }
+        
+        function updateHeaderForView(viewId) {
+            const headerActions = document.getElementById('header-actions')
+            
+            if (viewId === 'view-contacts') {
+                headerActions.innerHTML = `
+                    <div onclick="showToast('Filter menu would appear')" class="cursor-pointer">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                    </div>
+                `
+            } else if (viewId === 'view-dashboard') {
+                headerActions.innerHTML = `
+                    <div class="flex items-center gap-x-5 text-lg">
+                        <i onclick="showToast('Notifications opened')" class="fa-solid fa-bell cursor-pointer relative">
+                            <span class="absolute -top-1 -right-1 text-[10px] bg-red-500 text-white rounded-full h-4 w-4 flex items-center justify-center text-[9px] font-bold">3</span>
+                        </i>
+                        <i onclick="showToast('Search opened')" class="fa-solid fa-magnifying-glass cursor-pointer"></i>
+                    </div>
+                `
+            } else if (viewId === 'view-jobs') {
+                headerActions.innerHTML = `
+                    <div onclick="showToast('Export CSV clicked')" class="text-xs font-medium bg-zinc-800 px-5 h-7 flex items-center justify-center rounded-3xl cursor-pointer">EXPORT</div>
+                `
+            } else {
+                headerActions.innerHTML = `
+                    <div class="flex items-center gap-x-5 text-lg">
+                        <i class="fa-solid fa-magnifying-glass cursor-pointer"></i>
+                    </div>
+                `
+            }
+        }
+        
+        function renderPipeline(tabIndex) {
+            const container = document.getElementById('pipeline-content')
+            container.innerHTML = ''
+            
+            let html = ''
+            
+            if (tabIndex === 0) {
+                // Leads
+                html = `
+                    <div class="bg-zinc-900 rounded-3xl px-5 py-5 flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <span class="inline-block w-3 h-3 bg-rose-400 rounded-full animate-pulse"></span>
+                                <span class="font-semibold">Elena Petrova</span>
+                            </div>
+                            <div class="text-xs text-zinc-400">2023 Audi A4 • Paint quote</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-rose-400 font-medium">2 days ago</div>
+                            <button onclick="showToast('Lead moved to quoted stage');event.stopImmediatePropagation()" 
+                                    class="mt-3 text-[10px] px-6 py-2 bg-white text-zinc-900 rounded-3xl">QUOTE SENT</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-zinc-900 rounded-3xl px-5 py-5 flex justify-between items-center mt-3">
+                        <div>
+                            <div class="flex items-center gap-x-2">
+                                <span class="inline-block w-3 h-3 bg-amber-400 rounded-full"></span>
+                                <span class="font-semibold">Carlos Mendes</span>
+                            </div>
+                            <div class="text-xs text-zinc-400">2020 Jeep Wrangler</div>
+                        </div>
+                        <div class="text-emerald-400 text-xs">HOT</div>
+                    </div>
+                `
+            } else if (tabIndex === 1) {
+                html = `
+                    <div onclick="showToast('Opened quote detail for Marcus Rivera')" class="list-item bg-zinc-900 rounded-3xl p-6 cursor-pointer">
+                        <div class="flex justify-between">
+                            <div class="font-semibold">Marcus Rivera</div>
+                            <div class="font-mono text-xs bg-yellow-300 text-black px-4 flex items-center rounded-3xl">$2,895</div>
+                        </div>
+                        <div class="mt-6 flex justify-between text-xs">
+                            <div class="text-zinc-400">Tesla Model Y</div>
+                            <div class="text-emerald-400">Mar 1</div>
+                        </div>
+                    </div>
+                `
+            } else {
+                html = `
+                    <div class="flex items-center justify-center h-40 text-xs text-zinc-400 flex-col">
+                        <i class="fa-solid fa-hammer text-4xl mb-4 text-yellow-300"></i>
+                        <div class="font-medium">11 jobs in progress</div>
+                        <div class="text-[10px] mt-1">3 due today</div>
+                    </div>
+                `
+            }
+            
+            container.innerHTML = html
+        }
+        
+        function setPipelineTab(tabIndex) {
+            document.querySelectorAll('#view-jobs .flex.border-b > div').forEach((tab, index) => {
+                if (index === tabIndex) {
+                    tab.classList.add('border-b-2', 'border-yellow-300', 'text-yellow-300')
+                    tab.classList.remove('text-zinc-400')
+                } else {
+                    tab.classList.remove('border-b-2', 'border-yellow-300', 'text-yellow-300')
+                    tab.classList.add('text-zinc-400')
+                }
+            })
+            renderPipeline(tabIndex)
+        }
+        
+        function showNewContactModal() {
+            document.getElementById('new-contact-modal').classList.remove('hidden')
+            document.getElementById('new-contact-modal').classList.add('flex')
+        }
+        
+        function hideNewContactModal() {
+            const modal = document.getElementById('new-contact-modal')
+            modal.classList.add('hidden')
+            modal.classList.remove('flex')
+        }
+        
+        function createNewContact() {
+            const name = document.getElementById('new-name').value || "New Customer"
+            const phone = document.getElementById('new-phone').value
+            const vehicle = document.getElementById('new-vehicle').value
+            const email = document.getElementById('new-email').value || "customer@example.com"
+            
+            const newContact = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                vehicle: vehicle,
+                avatar: name.split(' ').map(n => n[0]).join('').substring(0, 2),
+                color: "bg-lime-500",
+                lastContact: "now",
+                status: "lead",
+                email: email
+            }
+            
+            contacts.unshift(newContact)
+            
+            hideNewContactModal()
+            showToast(`${name} added to contacts`)
+            
+            // If currently on contacts view, refresh list
+            if (!document.getElementById('view-contacts').classList.contains('hidden')) {
+                renderContacts(contacts)
+            }
+        }
+        
+        function selectDate(el) {
+            document.querySelectorAll('#view-calendar .grid.grid-cols-7 > div').forEach(div => {
+                div.classList.remove('bg-yellow-400', 'text-zinc-900')
+                div.classList.add('bg-zinc-900')
+            })
+            el.classList.add('bg-yellow-400', 'text-zinc-900')
+            showToast('Date selected - 3 appointments booked')
+        }
+        
+        function prevMonth() {
+            showToast('February 2025')
+        }
+        
+        function nextMonth() {
+            showToast('April 2025')
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast')
+            const toastText = document.getElementById('toast-text')
+            toastText.textContent = message
+            toast.classList.remove('hidden')
+            toast.style.transform = 'translate(-50%, 0)'
+            
+            setTimeout(() => {
+                toast.style.transitionDuration = '400ms'
+                toast.style.transform = 'translate(-50%, 80px)'
+                
+                setTimeout(() => {
+                    toast.classList.add('hidden')
+                    toast.style.transitionDuration = '0ms'
+                    toast.style.transform = 'translate(-50%, 0)'
+                }, 400)
+            }, 2800)
+        }
+        
+        // Keyboard shortcuts for demo
+        function handleKey(e) {
+            if (e.metaKey && e.key === "k") {
+                e.preventDefault()
+                const contactsView = document.getElementById('view-contacts')
+                if (contactsView.classList.contains('hidden')) {
+                    switchView('view-contacts')
+                    setTimeout(() => {
+                        document.getElementById('search-input').focus()
+                    }, 120)
+                } else {
+                    document.getElementById('search-input').focus()
+                }
+            }
+        }
+        
+        function simulateLiveData() {
+            // Random toast every 25 seconds
+            setInterval(() => {
+                if (Math.random() > 0.6) {
+                    const messages = [
+                        "New lead from website form",
+                        "Sarah Chen appointment confirmed",
+                        "Payment received • $420"
+                    ]
+                    showToast(messages[Math.floor(Math.random() * messages.length)])
+                }
+            }, 25000)
+        }
+        
+        // Main initialization
+        function initialize() {
+            // Tailwind ready
+            initializeTailwind()
+            
+            // Render the recent contacts on dashboard
+            populateRecentContacts()
+            
+            // Render contacts list
+            renderContacts(contacts)
+            
+            // Show the dashboard by default
+            switchView('view-dashboard')
+            
+            // Keyboard handler
+            document.addEventListener('keydown', handleKey)
+            
+            // Demo live activity
+            simulateLiveData()
+            
+            // Make the phone feel more real
+            const phone = document.getElementById('phone')
+            phone.style.maxHeight = '720px'
+            
+            // Show an onboarding toast after 1800ms
+            setTimeout(() => {
+                showToast('Welcome back to Booster CRM 👋')
+            }, 1800)
+            
+            console.log('%cBooster CRM mobile demo ready 🚀\nClean contact management with finger-friendly UX.', 
+                        'font-family:monospace;color:#fde047;font-size:10px')
+        }
+        
+        // Boot app
+        window.onload = initialize
+    </script>
+</body>
+</html>
